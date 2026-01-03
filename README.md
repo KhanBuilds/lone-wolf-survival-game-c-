@@ -1,2 +1,5 @@
-# lone-wolf-survival-game-c-
-A magical survival game using c++ and DSA concepts
+
+# Wolf Pack Survival Adventure Game
+
+DSA Lab Final Project  
+Text-based survival game using C++ and data structures.
