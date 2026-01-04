@@ -6,6 +6,8 @@
 #include <list>
 #include <functional> // For priority queue comparison
 
+using namespace std;
+
 // ==========================================
 // 0. COMMON DEFINITIONS & ENUMS
 // ==========================================
@@ -22,14 +24,14 @@ enum class GameState { START_SCREEN, PLAYING, EVENT_TRIGGERED, GAMEOVER, VICTORY
 
 // 1. Data Structure: Singly Linked List Node for Inventory
 struct ItemNode {
-    std::string name;
+    string name;
     ItemType type;
     int effectValue; // e.g., +20 Health or -10 Hunger
-    std::string description;
+    string description;
     
     ItemNode* next; // Pointer to next item
 
-    ItemNode(std::string n, ItemType t, int v, std::string d) 
+    ItemNode(string n, ItemType t, int v, string d) 
         : name(n), type(t), effectValue(v), description(d), next(nullptr) {}
 };
 
@@ -44,9 +46,9 @@ public:
     Inventory();
     ~Inventory(); // Destructor to clean up memory
 
-    bool addItem(std::string name, ItemType type, int value, std::string desc);
-    bool useItem(std::string itemName, class Wolf* player); // Forward declaration of Wolf needed
-    void removeItem(std::string itemName);
+    bool addItem(string name, ItemType type, int value, string desc);
+    bool useItem(string itemName, class Wolf* player); // Forward declaration of Wolf needed
+    void removeItem(string itemName);
     void displayInventory();
     bool isFull();
     
@@ -56,7 +58,7 @@ public:
 
 // 3. Class: Pack Member (Linked List Node)
 struct PackMember {
-    std::string name;
+    string name;
     Role role;
     int loyalty;
     PackMember* next;
@@ -84,7 +86,7 @@ public:
     void takeDamage(int amount);
     
     // Pack Mechanics
-    void recruitMember(std::string name, Role role);
+    void recruitMember(string name, Role role);
     void displayPack();
 };
 
@@ -95,20 +97,20 @@ public:
 // 5. Data Structure: Binary Tree Node
 struct StoryNode {
     int id;
-    std::string scenarioText;
+    string scenarioText;
     
     // Choice Texts
-    std::string choiceAText;
-    std::string choiceBText;
+    string choiceAText;
+    string choiceBText;
 
     // Pointers to consequences/next scenarios
     StoryNode* left;  // Path A
     StoryNode* right; // Path B
 
     bool isEnding;
-    std::string endingDescription;
+    string endingDescription;
 
-    StoryNode(int _id, std::string text) 
+    StoryNode(int _id, string text) 
         : id(_id), scenarioText(text), left(nullptr), right(nullptr), isEnding(false) {}
 };
 
@@ -127,7 +129,7 @@ public:
     StoryTree();
     ~StoryTree();
 
-    void buildTree(); // HARDCODED logic to build the tree (Task for Story Team)
+    void buildTree(); // HARDCODED logic to build the tree
     
     // Navigation
     void moveToLeft();  // Player chose A
@@ -145,8 +147,8 @@ public:
 
 // 7. Struct: Event Object
 struct GameEvent {
-    std::string title;
-    std::string description;
+    string title;
+    string description;
     int priority; // 1 = Critical, 2 = Urgent, 3 = Normal
     
     // Comparison operator for Priority Queue (Min-Heap logic)
@@ -160,11 +162,11 @@ struct GameEvent {
 class EventManager {
 private:
     // STL Priority Queue: <Type, Container, Comparator>
-    std::priority_queue<GameEvent, std::vector<GameEvent>, std::greater<GameEvent>> eventQueue;
+    priority_queue<GameEvent, vector<GameEvent>, greater<GameEvent>> eventQueue;
 
 public:
     void triggerRandomEvent(); // Logic to generate random events
-    void addEvent(std::string title, std::string desc, int priority);
+    void addEvent(string title, string desc, int priority);
     void processNextEvent(Wolf* player); // Pop and execute
     bool hasPendingEvents();
     GameEvent peekNextEvent();
@@ -179,8 +181,6 @@ struct GameSnapshot {
     int day;
     int health, hunger, energy;
     int currentNodeID;
-    // Note: Deep copying inventory for undo is complex, 
-    // for this level simply tracking stats + location is usually sufficient.
 };
 
 // 10. Class: Game Loop & History
@@ -191,10 +191,10 @@ private:
     EventManager events;
     
     // Stack for Undo (LIFO)
-    std::stack<GameSnapshot> historyStack;
+    stack<GameSnapshot> historyStack;
     
     // Queue for Multi-turn actions (FIFO)
-    std::queue<std::string> actionQueue; 
+    queue<string> actionQueue; 
 
     int currentDay;
     GameState state;
@@ -211,8 +211,8 @@ public:
     void undoLastMove();   // Pop from stack
     
     // File I/O
-    void saveToFile(std::string filename);
-    void loadFromFile(std::string filename);
+    void saveToFile(string filename);
+    void loadFromFile(string filename);
 
     // Getters for GUI
     Wolf* getPlayer() { return &player; }
